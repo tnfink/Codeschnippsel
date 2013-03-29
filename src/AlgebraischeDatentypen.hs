@@ -8,12 +8,14 @@ where
 
 import Test.Hspec
 import Test.QuickCheck
+import Data.List(find)
+import Data.Maybe (isNothing)
 
 
 data BinTreeT a = 
    Tree (BinTreeT a) a (BinTreeT a) | 
    Empty
-  deriving Show                
+  deriving (Show, Eq)                
 
 -- |binSearch searches for an element in the tree
 ---------------------------------------------------
@@ -70,13 +72,25 @@ binInsertSpec =
 -- |creates a tree from a list
 ------------------------------------------------------
 
-createBinTree = error "tbd"
+createBinTree :: Ord a => [a] -> BinTreeT a
+createBinTree = foldl (flip binInsert) Empty
 
+createBinTreeSpec :: Spec
+createBinTreeSpec =
+  describe "createBinTreeSpec" $ do
+    it "creates an empty tree from an empty list" $
+      createBinTree ([]::String) `shouldBe` Empty
+    it "creates a filled tree from a list" $
+      property ((\strs -> 
+        let tree = createBinTree strs
+            fstFailure = find (not . flip binSearch tree) strs 
+        in isNothing fstFailure
+                ) :: String -> Bool)
 
 
 ------------------------------------------------------
 adSpecifications :: [Spec]
-adSpecifications = [binSearchSpec,binInsertSpec]
+adSpecifications = [binSearchSpec,binInsertSpec,createBinTreeSpec]
 
 
 

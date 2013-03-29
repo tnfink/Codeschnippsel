@@ -2,6 +2,7 @@ module AlgebraischeDatentypen
 ( binSearch
 , BinTreeT
 , createBinTree
+, adSpecifications
 )
 where 
 
@@ -16,7 +17,7 @@ data BinTreeT a =
 
 -- |binSearch searches for an element in the tree
 ---------------------------------------------------
-binSearch :: (Ord a) => a -> (BinTreeT a) -> Bool
+binSearch :: (Ord a) => a -> BinTreeT a -> Bool
 binSearch _ Empty = False
 binSearch search (Tree left value right) 
   | search < value  = binSearch search left
@@ -24,13 +25,12 @@ binSearch search (Tree left value right)
   | search == value = True
   | otherwise = error "there seems to be an implementation error"
   
-tree :: BinTreeT [Char]
-tree = Tree (Tree Empty "a" Empty) "b" 
-            (Tree (Tree Empty "c" Empty) "d" (Tree Empty "e" Empty))
-
 binSearchSpec :: Spec
 binSearchSpec =
   describe "binSearch" $ do
+    let sub1 = Tree Empty "a" Empty
+        sub2 = Tree (Tree Empty "c" Empty) "d" (Tree Empty "e" Empty)
+        tree = Tree  sub1 "b" sub2
     it "returns false for an empty tree" $
       binSearch "a" Empty `shouldBe` False
     it "returns false if the value is not contained in the sorted tree" $
@@ -39,9 +39,10 @@ binSearchSpec =
       binSearch "e" tree `shouldBe` True
 
 -- |binInsert inserts a value to a tree, if the tree already contains the value
--- |  it will return the same tree. This meand the tree acts as a set.
+-- |  it will return the same tree. This means the tree acts as a set.
 ------------------------------------------------------
 
+binInsert :: (Ord a) => a -> BinTreeT a -> BinTreeT a
 binInsert newValue Empty = Tree Empty newValue Empty
 binInsert newValue tree@ (Tree left val right)
   | newValue == val = tree
@@ -71,12 +72,11 @@ binInsertSpec =
 
 createBinTree = error "tbd"
 
+
+
 ------------------------------------------------------
-
-allSpecifications :: [Spec]
-allSpecifications = [binSearchSpec,binInsertSpec]
-
+adSpecifications :: [Spec]
+adSpecifications = [binSearchSpec,binInsertSpec]
 
 
-main::IO()
-main = mapM_ hspec allSpecifications
+

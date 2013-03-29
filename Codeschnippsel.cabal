@@ -4,11 +4,13 @@ cabal-version:  >=1.2
 build-type:     Simple
 author:         tnfink
 
-executable AlgebraischeDatentypen
+executable CodeSchnippsel
   build-depends:   
                    base >= 4,
-                   hspec >= 1.4.5
+                   hspec >= 1.4.5,
+                   QuickCheck >= 2.5.1.1
   hs-source-dirs:  src
   ghc-options:     -Wall -rtsopts
-  main-is:         AlgebraischeDatentypen.hs
+  main-is:         Main.hs
+  other-modules:   AlgebraischeDatentypen
 

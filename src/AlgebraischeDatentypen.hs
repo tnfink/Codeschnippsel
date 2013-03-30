@@ -54,7 +54,7 @@ binInsert newValue tree@ (Tree left val right)
 
 binInsertSpec :: Spec
 binInsertSpec =
-  describe "binInsertSpec" $ do
+  describe "binInsert" $ do
     let testTree :: BinTreeT String -> String -> Bool
         testTree tree ele = binSearch ele insertedTree
           where insertedTree = binInsert ele tree  
@@ -77,7 +77,7 @@ createBinTree = foldl (flip binInsert) Empty
 
 createBinTreeSpec :: Spec
 createBinTreeSpec =
-  describe "createBinTreeSpec" $ do
+  describe "createBinTree" $ do
     it "creates an empty tree from an empty list" $
       createBinTree ([]::String) `shouldBe` Empty
     it "creates a filled tree from a list" $
